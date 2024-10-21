@@ -3,7 +3,14 @@
         <label class="label" for="task">Nueva tarea: </label>
         <input type="text" v-model="newTask" id="task" class="input-task" placeholder="Escribe tu tarea aquí">
         <input type="submit" value="Crear tarea" class="submit-button">
-    </form>
+        <ul>
+            <li 
+            v-for="(task, i) in tasks" 
+            :key="'task' + i"
+            :class="{completed: task.completed}"> 
+            {{ task.text }}</li>
+        </ul>
+   </form>
 </template>
 
 <script>
@@ -18,7 +25,7 @@ export default {
         createTask() {
             let task = {
                 text: this.newTask,
-                complete: false,
+                completed: false,
             };
             this.tasks.push(task);
             this.newTask = "";
@@ -62,5 +69,10 @@ export default {
 
 .submit-button:hover {
     background-color: #218838;
+}
+
+.completed {
+  text-decoration: line-through;
+  color: grey;
 }
 </style>
