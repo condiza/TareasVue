@@ -1,19 +1,25 @@
 <template>
-    <form @submit.prevent="createTask" id="app">
-        <label class="label" for="task">Nueva tarea: </label>
-        <input type="text" v-model="newTask" id="task" class="input-task" placeholder="Escribe tu tarea aquí">
-        <input type="submit" value="Crear tarea" class="submit-button">
-        <ul>
-            <li 
-            v-for="(task, i) in tasks" 
-            :key="'task' + i"
-            :class="{completed: task.completed}"> 
-            {{ task.text }}</li>
-        </ul>
-   </form>
+    <div class="task-list">
+        <h1>{{tasks.length}} Tasks</h1>
+        <form @submit.prevent="createTask" class="form">
+                <label class="label" for="task">Nueva tarea: </label>
+                <input type="text" v-model="newTask" id="task" class="input" placeholder="Escribe tu tarea aquí">
+                <input type="submit" value="Crear tarea" class="button">
+       </form>
+       <ul class="list">
+                <li class="task" 
+                v-for="(task, i) in tasks" 
+                :key="'task' + i"
+                :class="{completed: task.completed}"
+                @click="computeTask(task.text)"
+                > 
+                {{ task.text }}</li>
+            </ul>
+    </div>
 </template>
 
 <script>
+
 export default {
     data() {
         return {
@@ -30,49 +36,67 @@ export default {
             this.tasks.push(task);
             this.newTask = "";
             console.log(this.tasks);
+        },
+        computeTask(taskText){
+            for (let i = 0; i < this.tasks.length; i++) {
+                let task = this.tasks[i];
+                if (taskText === task.text) {
+                    task.completed = !task.completed
+                }                
+            }
         }
     }
 };
 </script>
 
-<style scoped>
-#app {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px;
+<style scoped> 
+
+.task-list { 
+    width: 800px; 
+    max-width: 100%; 
+    margin: 0px auto; 
+} 
+
+.form { 
+    background: white; 
+    border-radius: 12px; 
+    padding: 30px; 
+    box-shadow: 0px 10px 22px -1px rgba(0,0,0,0.25); 
+    margin-top: 10px; 
+} 
+
+.label { 
+    display: block; 
+    margin-bottom: 10px; 
+} 
+
+.input { 
+    height: 35px; 
+} 
+
+.button { 
+    margin-left: 20px; 
+    height: 35px; 
+    border: none; 
+    border-radius: 5px; 
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .2); 
+    background-color: #2ecc71; 
+    color: #ecf0f1; 
+    cursor: pointer 
+} 
+
+.list { 
+    margin-top: 40px; 
+} 
+
+.task { 
+    cursor: pointer; 
+    margin: 10px 0; 
+} 
+
+.completed { 
+    text-decoration: line-through; 
+    color: lightgrey; 
 }
 
-.label {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.input-task {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 300px;
-    font-size: 16px;
-    margin-bottom: 10px;
-}
-
-.submit-button {
-    padding: 10px 15px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.submit-button:hover {
-    background-color: #218838;
-}
-
-.completed {
-  text-decoration: line-through;
-  color: grey;
-}
 </style>
